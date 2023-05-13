@@ -360,8 +360,7 @@ public class SwiftyPing: NSObject {
             return
         }
         isPinging = true
-        sequenceStart = Date()
-        
+
         let timer = Timer(timeInterval: self.configuration.timeoutInterval, target: self, selector: #selector(self.timeout), userInfo: nil, repeats: false)
         RunLoop.main.add(timer, forMode: .common)
         self.timeoutTimer = timer
@@ -369,6 +368,7 @@ public class SwiftyPing: NSObject {
         _serial.async {
             let address = self.destination.ipv4Address
             do {
+                self.sequenceStart = Date()
                 let icmpPackage = try self.createICMPPackage(identifier: UInt16(self.identifier), sequenceNumber: UInt16(self.sequenceIndex))
                 
                 guard let socket = self.socket else { return }
